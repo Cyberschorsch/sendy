@@ -1,0 +1,19 @@
+sendy.sendy_subscribe_form:
+  path: '/sendy/form/sendy_subscribe'
+  defaults:
+    _form: '\Drupal\sendy\Form\SendySubscribeForm'
+    _title: 'SendySubscribeForm'
+  requirements:
+    _access: 'TRUE'
+  
+
+sendy.sendy_config_form:
+  path: '/admin/config/services/sendy/sendy_config'
+  defaults:
+    _form: '\Drupal\sendy\Form\SendyConfigForm'
+    _title: 'SendyConfigForm'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE
+

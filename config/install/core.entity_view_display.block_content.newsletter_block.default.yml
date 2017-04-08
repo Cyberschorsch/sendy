@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.newsletter_block
+    - field.field.block_content.newsletter_block.body
+    - field.field.block_content.newsletter_block.field_newsletter_list
+  module:
+    - text
+id: block_content.newsletter_block.default
+targetEntityType: block_content
+bundle: newsletter_block
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+  field_newsletter_list:
+    weight: 1
+    label: hidden
+    settings:
+      link: true
+      view_mode: default
+    third_party_settings: {  }
+    type: entity_reference_entity_view
+hidden:
+  langcode: true

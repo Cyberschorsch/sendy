@@ -1,0 +1,5 @@
+entity.newsletter_list.add_form:
+  route_name: entity.newsletter_list.add_form
+  title: 'Add Sendy Newsletter List'
+  appears_on:
+    - entity.newsletter_list.collection

@@ -1,0 +1,21 @@
+
+# Sendy Newsletter List menu items definition
+entity.newsletter_list.collection:
+  title: 'Sendy Newsletter List list'
+  route_name: entity.newsletter_list.collection
+  description: 'List Sendy Newsletter List entities'
+  parent: system.admin_structure
+  weight: 100
+
+newsletter_list.admin.structure.settings:
+  title: Sendy Newsletter List settings
+  description: 'Configure Sendy Newsletter List entities'
+  route_name: newsletter_list.settings
+  parent: system.admin_structure
+sendy.sendy_config_form:
+  title: 'Sendy.co Configuration'
+  route_name: sendy.sendy_config_form
+  description: 'A description for the menu entry'
+  parent: system.admin_config_services
+  weight: 99
+

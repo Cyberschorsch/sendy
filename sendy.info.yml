@@ -1,0 +1,5 @@
+name: Sendy.co integration
+type: module
+description: This module provides sendy.co integration
+core: 8.x
+package: Newsletter

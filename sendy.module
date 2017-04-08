@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Contains sendy.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function sendy_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the sendy module.
+    case 'help.page.sendy':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('This module provides sendy.co integration') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function sendy_form_sendy_subscribe_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // Support honeypot module.
+    if (\Drupal::moduleHandler()->moduleExists("honeypot")) {
+      honeypot_add_form_protection($form, $form_state, ['honeypot']);
+    }
+}
+
+/**
+ * Return all published newsletter lists.
+ * @return array
+ */
+function _sendy_get_newsletter_lists() {
+  $entity_ids = \Drupal::entityQuery('newsletter_list')
+    ->condition('status', 1)
+    ->execute();
+  return \Drupal::entityTypeManager()->getStorage('newsletter_list')->loadMultiple($entity_ids);
+}

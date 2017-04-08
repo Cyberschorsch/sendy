@@ -1,0 +1,5 @@
+services:
+  sendy.subscribe:
+    class: Drupal\sendy\SendySubscribe
+    arguments: []
+

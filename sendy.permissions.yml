@@ -1,0 +1,22 @@
+add sendy newsletter list entities:
+  title: 'Create new Sendy Newsletter List entities'
+
+administer sendy newsletter list entities:
+  title: 'Administer Sendy Newsletter List entities'
+  description: 'Allow to access the administration form to configure Sendy Newsletter List entities.'
+  restrict access: true
+
+delete sendy newsletter list entities:
+  title: 'Delete Sendy Newsletter List entities'
+
+edit sendy newsletter list entities:
+  title: 'Edit Sendy Newsletter List entities'
+
+access sendy newsletter list overview:
+  title: 'Access the Sendy Newsletter List overview page'
+
+view published sendy newsletter list entities:
+  title: 'View published Sendy Newsletter List entities'
+
+view unpublished sendy newsletter list entities:
+  title: 'View unpublished Sendy Newsletter List entities'

@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.newsletter_list.field_list_id
+  module:
+    - sendy
+id: newsletter_list.newsletter_list.field_list_id
+field_name: field_list_id
+entity_type: newsletter_list
+bundle: newsletter_list
+label: 'List ID'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

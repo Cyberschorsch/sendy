@@ -1,0 +1,22 @@
+# Sendy Newsletter List routing definition
+newsletter_list.settings_tab:
+  route_name: newsletter_list.settings
+  title: 'Settings'
+  base_route: newsletter_list.settings
+
+entity.newsletter_list.canonical:
+  route_name: entity.newsletter_list.canonical
+  base_route: entity.newsletter_list.canonical
+  title: 'View'
+
+entity.newsletter_list.edit_form:
+  route_name: entity.newsletter_list.edit_form
+  base_route: entity.newsletter_list.canonical
+  title: 'Edit'
+
+entity.newsletter_list.delete_form:
+  route_name:  entity.newsletter_list.delete_form
+  base_route:  entity.newsletter_list.canonical
+  title: Delete
+  weight: 10
+

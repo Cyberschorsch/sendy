@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.newsletter_list.newsletter_list.field_list_id
+  module:
+    - sendy
+id: newsletter_list.newsletter_list.default
+targetEntityType: newsletter_list
+bundle: newsletter_list
+mode: default
+content:
+  field_list_id:
+    weight: 0
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: sendy_list_formatter
+hidden:
+  langcode: true
+  name: true
+  user_id: true

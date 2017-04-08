@@ -1,0 +1,22 @@
+{
+  "name": "drupal/sendy",
+  "type": "drupal-module",
+  "authors": [
+    {
+      "name": "Lucio Waßill",
+      "email": "lucio@undpaul.de"
+    }
+  ],
+  "description": "This module provides sendy.co integration",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/sendy",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/sendy",
+    "source": "http://cgit.drupalcode.org/sendy"
+  },
+  "require": {
+    "jiririedl/php-sendy": "^2.0"
+  }
+}
