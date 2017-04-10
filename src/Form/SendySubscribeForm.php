@@ -5,6 +5,8 @@ namespace Drupal\sendy\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use SendyPHP\Sendy;
+use Drupal\sendy\SendySubscribe;
+use Drupal\Core\Url;
 
 /**
  * Class SendySubscribeForm.
@@ -66,13 +68,22 @@ class SendySubscribeForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = \Drupal::config('sendy.sendyconfig');
+    // Get global newsletter config.
     $newsletter_url = $config->get('newsletter_url');
+    $newsletter_url_callback = $config->get('newsletter_callback_url');
+    // Get form data from submit form.
     $name = $form_state->getValue('name');
     $email = $form_state->getValue('email_adress');
     $newsletter_id = $form_state->getValue('newsletter_id');
+    // Enter a new subscriber to the newsletter id.
     $sendySubscribe = new SendySubscribe($newsletter_url);
     $sendySubscribe->setListId($newsletter_id);
     $status = $sendySubscribe->subscribe($name, $email);
+    // Redirect the user to a thank you page.
+    if (!empty($newsletter_url_callback)) {
+      $redirect_url = URL::fromUri($newsletter_url_callback);
+      $form_state->setRedirectUrl($redirect_url);
+    }
     drupal_set_message(t('Thank you for subscribing to our newsletter.'));
   }
 

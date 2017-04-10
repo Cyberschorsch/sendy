@@ -41,6 +41,12 @@ class SendyConfigForm extends ConfigFormBase {
       '#size' => 64,
       '#default_value' => $config->get('newsletter_url'),
     ];
+    $form['newsletter_callback_url'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Newsletter Callback URL'),
+      '#description' => $this->t('Enter the URL where the user should be redirected after submission.'),
+      '#default_value' => $config->get('newsletter_callback_url'),
+    ];
     return parent::buildForm($form, $form_state);
   }
 
@@ -59,6 +65,7 @@ class SendyConfigForm extends ConfigFormBase {
 
     $this->config('sendy.sendyconfig')
       ->set('newsletter_url', $form_state->getValue('newsletter_url'))
+      ->set('newsletter_callback_url', $form_state->getValue('newsletter_callback_url'))
       ->save();
   }
 
