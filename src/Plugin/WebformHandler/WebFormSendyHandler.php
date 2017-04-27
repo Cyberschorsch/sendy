@@ -49,6 +49,7 @@ class WebformSendyHandler extends WebformHandlerBase {
     return [
       'list' => '',
       'email' => '',
+      'accept_checkbox' => '',
     ];
   }
 
@@ -70,20 +71,35 @@ class WebformSendyHandler extends WebformHandlerBase {
     ];
 
     $fields = $this->getWebform()->getElementsDecoded();
-    $options = array();
-    $options[''] = $this->t('- Select an option -');
+    # Email Options.
+    $email_options = array();
+    $email_options[''] = $this->t('- Select an option -');
     foreach ($fields as $field_name => $field) {
       if ($field['#type'] == 'email') {
-        $options[$field_name] = $field['#title'];
+        $email_options[$field_name] = $field['#title'];
       }
     }
-
+    # Checkbox Options.
+    $checkbox_options = array();
+    $checkbox_options[''] = $this->t('- Select an option -');
+    foreach ($fields as $field_name => $field) {
+      if ($field['#type'] == 'checkbox') {
+        $checkbox_options[$field_name] = $field['#title'];
+      }
+    }
     $form['email'] = [
       '#type' => 'select',
       '#title' => $this->t('Email field'),
       '#required' => TRUE,
       '#default_value' => $this->configuration['email'],
-      '#options' => $options,
+      '#options' => $email_options,
+    ];
+    $form['accept_checkbox'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Accept Checkbox'),
+      '#description' => t('Choose a checkbox field if subscribing should be optional.'),
+      '#default_value' => $this->configuration['accept_checkbox'],
+      '#options' => $checkbox_options,
     ];
 
     return $form;
@@ -108,11 +124,16 @@ class WebformSendyHandler extends WebformHandlerBase {
   public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE) {
     if (!$update) {
       $fields = $webform_submission->toArray(TRUE);
+      $accept_checkbox = $fields['data'][$this->configuration['accept_checkbox']];
+      if (!$accept_checkbox && !is_null($accept_checkbox)) {
+        return;
+      }
       $sendFields = array();
       foreach ($fields['data'] as $field_name => $field) {
         $sendFields[strtoupper($field_name)] = $field;
       }
       $email = $fields['data'][$this->configuration['email']];
+
       $newsletter = \Drupal::entityTypeManager()->getStorage('newsletter_list')->load($this->configuration['list']);
       $config = \Drupal::config('sendy.sendyconfig');
       $newsletter_url = $config->get('newsletter_url');
