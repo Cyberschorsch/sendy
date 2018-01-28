@@ -3,11 +3,15 @@
 namespace Drupal\sendy\Plugin\WebformHandler;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\WebformHandlerBase;
+use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
-use Psr\Log\LoggerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\webform\WebformSubmissionConditionsValidatorInterface;
 use Drupal\sendy\SendySubscribe;
+
 
 /**
  * Form submission to Sendy.co handler.
@@ -17,8 +21,8 @@ use Drupal\sendy\SendySubscribe;
  *   label = @Translation("Sendy.co"),
  *   category = @Translation("Sendy"),
  *   description = @Translation("Sends a form submission to sendy.co ."),
- *   cardinality = \Drupal\webform\WebformHandlerInterface::CARDINALITY_UNLIMITED,
- *   results = \Drupal\webform\WebformHandlerInterface::RESULTS_PROCESSED,
+ *   cardinality = \Drupal\webform\Plugin\WebformHandlerInterface::CARDINALITY_UNLIMITED,
+ *   results = \Drupal\webform\Plugin\WebformHandlerInterface::RESULTS_PROCESSED,
  * )
  */
 class WebformSendyHandler extends WebformHandlerBase {
@@ -26,8 +30,8 @@ class WebformSendyHandler extends WebformHandlerBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger);
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, WebformSubmissionConditionsValidatorInterface $conditions_validator) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger_factory, $config_factory, $entity_type_manager, $conditions_validator);
   }
 
   /**
@@ -38,7 +42,10 @@ class WebformSendyHandler extends WebformHandlerBase {
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('logger.factory')->get('webform.sendy')
+      $container->get('logger.factory'),
+      $container->get('config.factory'),
+      $container->get('entity_type.manager'),
+      $container->get('webform_submission.conditions_validator')
     );
   }
 
@@ -50,6 +57,7 @@ class WebformSendyHandler extends WebformHandlerBase {
       'list' => '',
       'email' => '',
       'accept_checkbox' => '',
+      'segment' => '',
     ];
   }
 
@@ -87,6 +95,15 @@ class WebformSendyHandler extends WebformHandlerBase {
         $checkbox_options[$field_name] = $field['#title'];
       }
     }
+
+    # hiddenfield options for segments.
+    $hiddenfield = array();
+    $hiddenfield[''] = $this->t('- Select an option -');
+    foreach ($fields as $field_name => $field) {
+      if ($field['#type'] == 'hidden') {
+        $hiddenfield[$field_name] = $field['#title'];
+      }
+    }
     $form['email'] = [
       '#type' => 'select',
       '#title' => $this->t('Email field'),
@@ -101,7 +118,13 @@ class WebformSendyHandler extends WebformHandlerBase {
       '#default_value' => $this->configuration['accept_checkbox'],
       '#options' => $checkbox_options,
     ];
-
+    $form['segment'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Segment field'),
+      '#description' => t('Choose a text field for populating the segment field if configured in sendy'),
+      '#default_value' => $this->configuration['segment'],
+      '#options' => $hiddenfield,
+    ];
     return $form;
   }
 
@@ -133,7 +156,7 @@ class WebformSendyHandler extends WebformHandlerBase {
         $sendFields[strtoupper($field_name)] = $field;
       }
       $email = $fields['data'][$this->configuration['email']];
-
+      $segment = !empty($this->configuration['segment']) ? $fields['data'][$this->configuration['segment']] : '' ;
       $newsletter = \Drupal::entityTypeManager()->getStorage('newsletter_list')->load($this->configuration['list']);
       $config = \Drupal::config('sendy.sendyconfig');
       $newsletter_url = $config->get('newsletter_url');
@@ -141,7 +164,7 @@ class WebformSendyHandler extends WebformHandlerBase {
 
       $sendySubscribe = new SendySubscribe($newsletter_url);
       $sendySubscribe->setListId($newsletter_id);
-      $status = $sendySubscribe->subscribe('John Doe', $email);
+      $status = $sendySubscribe->subscribe('John Doe', $email, ['segment' => $segment]);
       drupal_set_message(t('Thank you for subscribing to our newsletter.'));
     }
   }

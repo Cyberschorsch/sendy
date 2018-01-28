@@ -23,7 +23,7 @@ class SendySubscribe {
   }
 
   public function subscribe($name, $email, $additional_parameters = '') {
-    $status =$this->sendy->subscribe($this->getListId(), $email , empty($name) ? 'John Doe' : $name);
+    $status =$this->sendy->subscribe($this->getListId(), $email , empty($name) ? 'John Doe' : $name, $additional_parameters);
     return $status;
   }
 
