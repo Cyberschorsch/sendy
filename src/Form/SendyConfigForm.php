@@ -47,6 +47,12 @@ class SendyConfigForm extends ConfigFormBase {
       '#description' => $this->t('Enter the URL where the user should be redirected after submission.'),
       '#default_value' => $config->get('newsletter_callback_url'),
     ];
+    $form['api_key'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Sendy API Key'),
+      '#description' => $this->t('Enter the api key for your sendy installation.'),
+      '#default_value' => $config->get('api_key'),
+    ];
     return parent::buildForm($form, $form_state);
   }
 
@@ -66,6 +72,7 @@ class SendyConfigForm extends ConfigFormBase {
     $this->config('sendy.sendyconfig')
       ->set('newsletter_url', $form_state->getValue('newsletter_url'))
       ->set('newsletter_callback_url', $form_state->getValue('newsletter_callback_url'))
+      ->set('api_key', $form_state->getValue('api_key'))
       ->save();
   }
 

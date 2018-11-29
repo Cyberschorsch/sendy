@@ -76,7 +76,7 @@ class SendySubscribeForm extends FormBase {
     $email = $form_state->getValue('email_adress');
     $newsletter_id = $form_state->getValue('newsletter_id');
     // Enter a new subscriber to the newsletter id.
-    $sendySubscribe = new SendySubscribe($newsletter_url);
+    $sendySubscribe = new SendySubscribe($newsletter_url, $config->get('api_key'));
     $sendySubscribe->setListId($newsletter_id);
     $status = $sendySubscribe->subscribe($name, $email);
     // Redirect the user to a thank you page.

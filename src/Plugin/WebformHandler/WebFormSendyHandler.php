@@ -3,7 +3,6 @@
 namespace Drupal\sendy\Plugin\WebformHandler;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\facets\Exception\Exception;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -163,16 +162,10 @@ class WebformSendyHandler extends WebformHandlerBase {
       $newsletter_url = $config->get('newsletter_url');
       $newsletter_id = $newsletter->field_list_id->value;
 
-      $sendySubscribe = new SendySubscribe($newsletter_url);
+      $sendySubscribe = new SendySubscribe($newsletter_url, $config->get('api_key'));
       $sendySubscribe->setListId($newsletter_id);
-      try {
-        $status = $sendySubscribe->subscribe('John Doe', $email, ['segment' => $segment]);
-        drupal_set_message(t('Thank you for subscribing to our newsletter.'));
-      }
-      catch (Exception $e) {
-        
-      }
-
+      $status = $sendySubscribe->subscribe('John Doe', $email, ['segment' => $segment]);
+      drupal_set_message(t('Thank you for subscribing to our newsletter.'));
     }
   }
 }
