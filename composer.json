@@ -17,6 +17,6 @@
     "source": "http://cgit.drupalcode.org/sendy"
   },
   "require": {
-    "jiririedl/php-sendy": "^2.0"
+    "jiririedl/php-sendy": "~4"
   }
 }
