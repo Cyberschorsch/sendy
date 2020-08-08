@@ -165,7 +165,7 @@ class WebformSendyHandler extends WebformHandlerBase {
       $sendySubscribe = new SendySubscribe($newsletter_url, $config->get('api_key'));
       $sendySubscribe->setListId($newsletter_id);
       $status = $sendySubscribe->subscribe('John Doe', $email, ['segment' => $segment]);
-      drupal_set_message(t('Thank you for subscribing to our newsletter.'));
+      \Drupal::service('messenger')->addMessage(t('Thank you for subscribing to our newsletter.'));
     }
   }
 }

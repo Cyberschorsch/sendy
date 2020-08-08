@@ -4,8 +4,8 @@ namespace Drupal\sendy;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
-use Drupal\Core\Routing\LinkGeneratorTrait;
 use Drupal\Core\Url;
+use Drupal\Core\Link;
 
 /**
  * Defines a class to build a listing of Sendy Newsletter List entities.
@@ -13,8 +13,6 @@ use Drupal\Core\Url;
  * @ingroup sendy
  */
 class NewsletterListListBuilder extends EntityListBuilder {
-
-  use LinkGeneratorTrait;
 
   /**
    * {@inheritdoc}

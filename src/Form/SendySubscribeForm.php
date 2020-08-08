@@ -84,7 +84,7 @@ class SendySubscribeForm extends FormBase {
       $redirect_url = URL::fromUri($newsletter_url_callback);
       $form_state->setRedirectUrl($redirect_url);
     }
-    drupal_set_message(t('Thank you for subscribing to our newsletter.'));
+    \Drupal::service('messenger')->addMessage(t('Thank you for subscribing to our newsletter.'));
   }
 
 }

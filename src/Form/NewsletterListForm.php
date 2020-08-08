@@ -34,13 +34,13 @@ class NewsletterListForm extends ContentEntityForm {
 
     switch ($status) {
       case SAVED_NEW:
-        drupal_set_message($this->t('Created the %label Sendy Newsletter List.', [
+        \Drupal::service('messenger')->addMessage($this->t('Created the %label Sendy Newsletter List.', [
           '%label' => $entity->label(),
         ]));
         break;
 
       default:
-        drupal_set_message($this->t('Saved the %label Sendy Newsletter List.', [
+        \Drupal::service('messenger')->addMessage($this->t('Saved the %label Sendy Newsletter List.', [
           '%label' => $entity->label(),
         ]));
     }
