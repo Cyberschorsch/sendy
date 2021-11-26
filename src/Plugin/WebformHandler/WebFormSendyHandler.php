@@ -30,28 +30,6 @@ class WebformSendyHandler extends WebformHandlerBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, WebformSubmissionConditionsValidatorInterface $conditions_validator) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger_factory, $config_factory, $entity_type_manager, $conditions_validator);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('logger.factory'),
-      $container->get('config.factory'),
-      $container->get('entity_type.manager'),
-      $container->get('webform_submission.conditions_validator')
-    );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function defaultConfiguration() {
     return [
       'list' => '',
@@ -157,7 +135,7 @@ class WebformSendyHandler extends WebformHandlerBase {
       }
       $email = $fields['data'][$this->configuration['email']];
       $segment = !empty($this->configuration['segment']) ? $fields['data'][$this->configuration['segment']] : '' ;
-      $newsletter = \Drupal::entityTypeManager()->getStorage('newsletter_list')->load($this->configuration['list']);
+      $newsletter = $this->entityTypeManager->getStorage('newsletter_list')->load($this->configuration['list']);
       $config = \Drupal::config('sendy.sendyconfig');
       $newsletter_url = $config->get('newsletter_url');
       $newsletter_id = $newsletter->field_list_id->value;
